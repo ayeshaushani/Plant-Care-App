@@ -6,8 +6,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // screens
 import Login from './app/(screen)/Login';
 import Dashboard from './app/(screen)/dashboard';  // 👈 oyage Dashboard.tsx import karanna
+import ReminderScreen from './app/(dashboard)/reminders/index'
 
-const Stack = createNativeStackNavigator();
+// 👇 Define type for your stack routes
+export type RootStackParamList = {
+  Login: undefined;
+  Dashboard: undefined;
+  ReminderScreen: undefined; // add params if needed later
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
@@ -23,6 +31,11 @@ export default function App() {
           name="Dashboard"
           component={Dashboard}
           options={{ headerShown: false }}
+        />
+          <Stack.Screen
+          name="ReminderScreen"
+          component={ReminderScreen}
+          options={{ headerShown: true, title: "Plant Care Reminders" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,17 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
+  ImageBackground,
   KeyboardAvoidingView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  StyleSheet,
-  ImageBackground,
 } from 'react-native';
-import React, { useState } from 'react';
-import { FIREBASE_AUTH } from './../../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 
 const Login = () => {
   const [email, setEmail] = useState('');

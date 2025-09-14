@@ -1,4 +1,5 @@
-import { View, Text } from "react-native"
+import { FIREBASE_AUTH } from "@/firebaseConfig"
+import { onAuthStateChanged, User } from "firebase/auth"
 import React, {
   createContext,
   ReactNode,
@@ -6,8 +7,6 @@ import React, {
   useEffect,
   useState
 } from "react"
-import { onAuthStateChanged, User } from "firebase/auth"
-import { FIREBASE_AUTH } from "@/firebase"
 
 const AuthContext = createContext<{ user: User | null; loading: boolean }>({
   user: null,
