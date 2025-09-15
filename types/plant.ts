@@ -1,9 +1,10 @@
+// types.ts
 export interface Plant {
-  id?: string
-  name: string
-  species?: string
-  description?: string
-  imageUrl?: string   // ✅ store uploaded image URL
-  userId: string
-  createdAt?: string
+  id?: string;               // Firestore document ID
+  name: string;
+  type: string;
+  photoUrl: string;
+  wateringFrequency: number; // in days
+  lastWatered?: string;      // ISO date string
+  createdAt?: string;        // ISO date string
 }
