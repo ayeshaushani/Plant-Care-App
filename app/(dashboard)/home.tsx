@@ -105,9 +105,10 @@ const Home = () => {
             <Text style={styles.actionEmoji}>📝</Text>
             <Text style={styles.actionText}>Add Plant</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={styles.actionButton}
+           onPress={() => router.push("/(dashboard)/(user)/user")}>
             <Text style={styles.actionEmoji}>🔍</Text>
-            <Text style={styles.actionText}>Diagnose</Text>
+            <Text style={styles.actionText}>User</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
             <Text style={styles.actionEmoji}>📊</Text>
