@@ -18,6 +18,7 @@ const Home = () => {
     { id: 2, plant: 'Monstera', task: 'Fertilize', time: '2:00 PM', completed: true },
     { id: 3, plant: 'Snake Plant', task: 'Rotate', time: '4:30 PM', completed: false },
   ];
+  
 
   return (
     <View style={styles.container}>
@@ -99,17 +100,22 @@ const Home = () => {
             <Text style={styles.actionEmoji}>💧</Text>
             <Text style={styles.actionText}>Water</Text>
           </TouchableOpacity> */}
-          <TouchableOpacity style={styles.actionButton}
-         onPress={() => router.push("/(dashboard)/plants")}
+          <TouchableOpacity 
+  style={styles.actionButton}
+  onPress={() => router.push("/(dashboard)/plants")}
 >
-            <Text style={styles.actionEmoji}>📝</Text>
-            <Text style={styles.actionText}>Add Plant</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}
-           onPress={() => router.push("/(dashboard)/(user)/user")}>
-            <Text style={styles.actionEmoji}>🔍</Text>
-            <Text style={styles.actionText}>User</Text>
-          </TouchableOpacity>
+  <Text style={styles.actionEmoji}>📝</Text>
+  <Text style={styles.actionText}>Add Plant</Text>
+</TouchableOpacity>
+
+<TouchableOpacity 
+  style={styles.actionButton}
+  onPress={() => router.push("/(dashboard)/(user)/user")}
+>
+  <Text style={styles.actionEmoji}>🔍</Text>
+  <Text style={styles.actionText}>User</Text>
+</TouchableOpacity>
+
           <TouchableOpacity style={styles.actionButton}>
             <Text style={styles.actionEmoji}>📊</Text>
             <Text style={styles.actionText}>Stats</Text>
