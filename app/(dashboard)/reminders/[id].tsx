@@ -55,14 +55,15 @@ const ReminderFormScreen = () => {
       date,              // mandatory in Reminder
       done: false,       // default value
       userId: user?.uid,
-      plantId:selectedPlantId           // if plant specific reminder
+      //plantId:selectedPlantId           // if plant specific reminder
     })
       } else {
         await updateReminder(id!, {   title,
       description,
       date,              // keep date updatable
       userId: user?.uid,
-      plantId:selectedPlantId })
+     // plantId:selectedPlantId
+     })
       }
       router.back()
     } catch (error) {

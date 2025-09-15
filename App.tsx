@@ -4,9 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // screens
-import Login from './app/(screen)/Login';
-import Dashboard from './app/(screen)/dashboard';  // 👈 oyage Dashboard.tsx import karanna
-import ReminderScreen from './app/(dashboard)/reminders/index'
+import Login from './app/(dashboard)/Login';
+import Dashboard from './app/(dashboard)/home';  // 👈 oyage Dashboard.tsx import karanna
+//import ReminderScreen from './app/(dashboard)/reminders/index'
 
 // 👇 Define type for your stack routes
 export type RootStackParamList = {
@@ -34,7 +34,7 @@ export default function App() {
         />
           <Stack.Screen
           name="ReminderScreen"
-          component={ReminderScreen}
+          component={Login}
           options={{ headerShown: true, title: "Plant Care Reminders" }}
         />
       </Stack.Navigator>

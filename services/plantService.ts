@@ -59,3 +59,5 @@ export const updatePlant = async (id: string, plant: Plant) => {
   const { id: _id, ...plantData } = plant
   return updateDoc(plantDocRef, plantData)
 }
+
+

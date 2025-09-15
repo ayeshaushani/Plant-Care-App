@@ -3,8 +3,11 @@ import { View, Text, TouchableOpacity, TextInput, FlatList } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { Reminder } from "@/types/reminder"
 import { createReminder } from "@/services/reminderService"
+import { getAllPlantsByUserId } from "@/services/plantService"
 import { useLoader } from "@/context/LoaderContext"
 import { useAuth } from "@/context/AuthContext"
+import { Plant } from "@/types/plant"
+
 
 export default function ReminderForm() {
   const { user } = useAuth()
@@ -12,7 +15,7 @@ export default function ReminderForm() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [date, setDate] = useState(new Date())
-  const [plants, setPlants] = useState<{id: string, name: string}[]>([])
+  const [plants, setPlants] = useState<Plant[]>([])
   const [selectedPlantId, setSelectedPlantId] = useState<string | undefined>(undefined)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
@@ -32,7 +35,7 @@ export default function ReminderForm() {
       title,
       description,
       userId: user.uid,
-      date: date.toISOString(),
+      date,
       plantId: selectedPlantId
     })
     alert("Reminder saved!")
@@ -63,7 +66,8 @@ export default function ReminderForm() {
       <Text>Select Plant</Text>
       <FlatList
         data={plants}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => item.id ?? index.toString()}
+
         horizontal
         renderItem={({ item }) => (
           <TouchableOpacity
