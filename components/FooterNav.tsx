@@ -4,7 +4,7 @@ import { useRouter, useSegments } from "expo-router"
 
 const tabs = [
   { lable: "Home", path: "/home" },
-  { lable: "Project", path: "/project" },
+  { lable: "Plant", path: "/plant" },
   { lable: "User", path: "/user" }
 ] as const
 

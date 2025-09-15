@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
+import { useRouter } from "expo-router";
+
 
 const Home = () => {
+  const router = useRouter();
+
   // Sample data for plants and tasks
   const plants = [
     { id: 1, name: 'Monstera', nextWatering: 'Tomorrow', health: 'Good' },
@@ -91,11 +95,13 @@ const Home = () => {
         {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionButton}>
+          {/* <TouchableOpacity style={styles.actionButton}>
             <Text style={styles.actionEmoji}>💧</Text>
             <Text style={styles.actionText}>Water</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.actionButton}
+         onPress={() => router.push("/(dashboard)/plants")}
+>
             <Text style={styles.actionEmoji}>📝</Text>
             <Text style={styles.actionText}>Add Plant</Text>
           </TouchableOpacity>
