@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { getAuth } from "firebase/auth";
 import { userService } from "@/services/userService";
-import { User } from "@/types";
+import { User } from "@/types/User";
 
 export default function UserList() {
   const [user, setUser] = useState<User | null>(null);
