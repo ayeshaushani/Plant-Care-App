@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, TextInput, FlatList } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { Reminder } from "@/types/reminder"
 import { createReminder } from "@/services/reminderService"
-import { getAllPlantsByUserId } from "@/services/plantService"
 import { useLoader } from "@/context/LoaderContext"
 import { useAuth } from "@/context/AuthContext"
 import { Plant } from "@/types/plant"
@@ -23,8 +22,8 @@ export default function ReminderForm() {
   useEffect(() => {
     const fetchPlants = async () => {
       if (!user) return
-      const data = await getAllPlantsByUserId(user.uid)
-      setPlants(data)
+      const data = await (user.uid)
+     // setPlants(data)
     }
     fetchPlants()
   }, [user])
