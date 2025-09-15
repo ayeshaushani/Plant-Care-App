@@ -1,111 +1,116 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, TouchableOpacity, TextInput, FlatList } from "react-native"
-import DateTimePicker from "@react-native-community/datetimepicker"
-import { Reminder } from "@/types/reminder"
-import { createReminder } from "@/services/reminderService"
-import { useLoader } from "@/context/LoaderContext"
-import { useAuth } from "@/context/AuthContext"
-import { Plant } from "@/types/plant"
+// app/(dashboard)/plants/[id].tsx
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, Image, Button, Alert, StyleSheet } from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { getAuth } from "firebase/auth";
+import { plantService } from "@/services/plantService";
+import { Plant } from "@/types/plant";
 
+const PlantDetail = () => {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
+  const userId = getAuth().currentUser?.uid;
 
-export default function ReminderForm() {
-  const { user } = useAuth()
+  const [plant, setPlant] = useState<Plant | null>(null);
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [wateringFrequency, setWateringFrequency] = useState("");
 
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [date, setDate] = useState(new Date())
-  const [plants, setPlants] = useState<Plant[]>([])
-  const [selectedPlantId, setSelectedPlantId] = useState<string | undefined>(undefined)
-  const [showDatePicker, setShowDatePicker] = useState(false)
-
-  // Load user's plants
   useEffect(() => {
-    const fetchPlants = async () => {
-      if (!user) return
-      const data = await (user.uid)
-     // setPlants(data)
-    }
-    fetchPlants()
-  }, [user])
+    if (!userId || !id) return;
 
-  const handleSave = async () => {
-    if (!user || !selectedPlantId) return alert("Select a plant first!")
-    await createReminder({
-      title,
-      description,
-      userId: user.uid,
-      date,
-      plantId: selectedPlantId
-    })
-    alert("Reminder saved!")
-    setTitle("")
-    setDescription("")
-    setSelectedPlantId(undefined)
-    setDate(new Date())
+    const fetchPlant = async () => {
+      const data = await plantService.getPlant(userId, id);
+      if (data) {
+        setPlant(data);
+        setName(data.name);
+        setType(data.type);
+        setWateringFrequency(data.wateringFrequency.toString());
+      }
+    };
+
+    fetchPlant();
+  }, [userId, id]);
+
+  const handleUpdate = async () => {
+    if (!userId || !id) return;
+
+    try {
+      await plantService.updatePlant(userId, id, {
+        name,
+        type,
+        wateringFrequency: Number(wateringFrequency),
+      });
+      Alert.alert("Success", "Plant updated successfully!");
+    } catch (err) {
+      console.log("Update error:", err);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!userId || !id || !plant?.photoUrl) return;
+
+    Alert.alert("Delete Plant", `Are you sure you want to delete "${plant.name}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await plantService.deletePlant(userId, id, plant.photoUrl);
+            router.back(); // go back to plant list
+          } catch (err) {
+            console.log("Delete error:", err);
+          }
+        },
+      },
+    ]);
+  };
+
+  if (!plant) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading plant...</Text>
+      </View>
+    );
   }
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text>Title</Text>
+    <View style={styles.container}>
+      <Image source={{ uri: plant.photoUrl }} style={styles.photo} />
+
+      <Text style={styles.label}>Name:</Text>
+      <TextInput style={styles.input} value={name} onChangeText={setName} />
+
+      <Text style={styles.label}>Type:</Text>
+      <TextInput style={styles.input} value={type} onChangeText={setType} />
+
+      <Text style={styles.label}>Watering Frequency (days):</Text>
       <TextInput
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Enter reminder title"
-        style={{ borderWidth: 1, marginBottom: 10, padding: 5 }}
+        style={styles.input}
+        value={wateringFrequency}
+        onChangeText={setWateringFrequency}
+        keyboardType="numeric"
       />
 
-      <Text>Description</Text>
-      <TextInput
-        value={description}
-        onChangeText={setDescription}
-        placeholder="Enter reminder description"
-        style={{ borderWidth: 1, marginBottom: 10, padding: 5 }}
-      />
-
-      <Text>Select Plant</Text>
-      <FlatList
-        data={plants}
-        keyExtractor={(item, index) => item.id ?? index.toString()}
-
-        horizontal
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => setSelectedPlantId(item.id)}
-            style={{
-              padding: 10,
-              margin: 5,
-              borderWidth: 1,
-              borderColor: selectedPlantId === item.id ? "green" : "#ccc"
-            }}
-          >
-            <Text>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-      />
-
-      <Text>Date: {date.toDateString()}</Text>
-      <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-        <Text style={{ color: "blue", marginBottom: 10 }}>Pick Date</Text>
-      </TouchableOpacity>
-
-      {showDatePicker && (
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) => {
-            setShowDatePicker(false)
-            if (selectedDate) setDate(selectedDate)
-          }}
-        />
-      )}
-
-      <TouchableOpacity
-        onPress={handleSave}
-        style={{ backgroundColor: "green", padding: 10, marginTop: 20 }}
-      >
-        <Text style={{ color: "white" }}>Save Reminder</Text>
-      </TouchableOpacity>
+      <Button title="Update Plant" onPress={handleUpdate} color="#4CAF50" />
+      <View style={{ height: 10 }} />
+      <Button title="Delete Plant" onPress={handleDelete} color="red" />
     </View>
-  )
-}
+  );
+};
+
+export default PlantDetail;
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
+  photo: { width: "100%", height: 200, borderRadius: 8, marginBottom: 16 },
+  label: { fontSize: 16, fontWeight: "bold", marginTop: 12 },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 8,
+    marginTop: 4,
+  },
+});
