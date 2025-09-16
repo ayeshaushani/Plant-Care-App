@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
 import { useRouter } from "expo-router";
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 
 
 const Home = () => {
   const router = useRouter();
+  const navigation = require('@react-navigation/native').useNavigation();
 
   // Sample data for plants and tasks
   const plants = [
@@ -21,7 +23,7 @@ const Home = () => {
   
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {flex: 1}]}> 
       {/* Header */}
       <View style={styles.header}>
         <View>
@@ -32,8 +34,7 @@ const Home = () => {
           <Text style={styles.profileInitial}>P</Text>
         </TouchableOpacity>
       </View>
-
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
         {/* Stats Overview */}
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
@@ -49,7 +50,6 @@ const Home = () => {
             <Text style={styles.statLabel}>Healthy</Text>
           </View>
         </View>
-
         {/* Today's Tasks */}
         <Text style={styles.sectionTitle}>Today's Tasks</Text>
         <View style={styles.tasksContainer}>
@@ -68,7 +68,6 @@ const Home = () => {
             </View>
           ))}
         </View>
-
         {/* Your Plants */}
         <Text style={styles.sectionTitle}>Your Plants</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.plantsScroll}>
@@ -82,9 +81,9 @@ const Home = () => {
                 <Text style={styles.wateringText}>Water {plant.nextWatering}</Text>
               </View>
               <View style={[
-                styles.healthStatus, 
-                plant.health === 'Excellent' ? styles.healthExcellent : 
-                plant.health === 'Good' ? styles.healthGood : 
+                styles.healthStatus,
+                plant.health === 'Excellent' ? styles.healthExcellent :
+                plant.health === 'Good' ? styles.healthGood :
                 styles.healthNeedsCare
               ]}>
                 <Text style={styles.healthText}>{plant.health}</Text>
@@ -92,47 +91,44 @@ const Home = () => {
             </View>
           ))}
         </ScrollView>
-
-        {/* Quick Actions */}
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-        <View style={styles.actionsContainer}>
-          {/* <TouchableOpacity style={styles.actionButton}>
-            <Text style={styles.actionEmoji}>💧</Text>
-            <Text style={styles.actionText}>Water</Text>
-          </TouchableOpacity> */}
-          <TouchableOpacity 
-  style={styles.actionButton}
-  onPress={() => router.push("/(dashboard)/plants")}
->
-  <Text style={styles.actionEmoji}>📝</Text>
-  <Text style={styles.actionText}>Add Plant</Text>
-</TouchableOpacity>
-
-<TouchableOpacity 
-  style={styles.actionButton}
-  onPress={() => router.push("/(dashboard)/(user)/user")}
->
-  <Text style={styles.actionEmoji}>🔍</Text>
-  <Text style={styles.actionText}>User</Text>
-</TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionButton}>
-            <Text style={styles.actionEmoji}>📊</Text>
-            <Text style={styles.actionText}>Stats</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
-    </View>
+    
+       
+    
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => navigation.navigate('AddPlant')}
+            >
+              <Text style={styles.actionEmoji}>📝</Text>
+              <Text style={styles.actionText}>Add Plant</Text>
+            </TouchableOpacity>
+          
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => navigation.navigate('UserSearch')}
+            >
+              <Text style={styles.actionEmoji}>🔍</Text>
+              <Text style={styles.actionText}>User Search</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => navigation.navigate('UserList')}
+            >
+              <Text style={styles.actionEmoji}>📊</Text>
+              <Text style={styles.actionText}>Status</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
   );
-};
+}
 
 export default Home;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#F8F9F4',
-    padding: 16,
+    padding: 16
   },
   header: {
     flexDirection: 'row',
@@ -177,10 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
@@ -213,10 +206,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
@@ -269,10 +259,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
@@ -325,9 +312,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   actionsContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 30,
+    padding: 16,
+    backgroundColor: '#F8F9F4',
+    borderTopWidth: 1,
+    borderColor: '#eee',
+    zIndex: 10,
   },
   actionButton: {
     backgroundColor: 'white',
@@ -337,10 +332,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
